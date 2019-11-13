@@ -4,23 +4,25 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "start": "HOST=localhost PORT=3000 nodemon -w src -x 'node src'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "knex": "^0.17.2",
+    "knex": "^0.20.1",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",
     "koa-compose": "^4.1.0",
+    "koa-helmet": "^5.2.0",
     "koa-router": "^7.4.0",
     "sqlite3": "^4.0.8",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.17.3",
     "nodemon": "^1.19.1"
   }
