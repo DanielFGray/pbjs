@@ -3,7 +3,8 @@ const uuid1 = require('uuid/v1')
 const uuid4 = require('uuid/v4')
 const moment = require('moment')
 const db = require('./db')
-const { appPath } = require('../config')
+
+const { APP_PATH } = process.env
 
 async function create({ body, title, expiration }) {
   if (! body) return { status: 'error', message: 'missing "body" field' }

@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
+    "dotenv": "^8.2.0",
     "knex": "^0.20.1",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",

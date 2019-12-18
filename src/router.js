@@ -1,12 +1,13 @@
 const Router = require('koa-router')
 const kcompose = require('koa-compose')
 const app = require('./app')
-const { appPath } = require('../config')
+
+const { APP_PATH } = process.env
 
 const router = new Router()
 
 router.get('/', ctx => {
-  ctx.body = `to upload a new paste:\n\nyour command | curl -F 'body=<-' ${appPath}/\n`
+  ctx.body = `to upload a new paste:\n\nyour command | curl -F 'body=<-' ${APP_PATH}/\n`
 })
 
 router.post('/', async ctx => {

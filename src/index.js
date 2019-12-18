@@ -1,9 +1,11 @@
+require('dotenv/config')
 const Koa = require('koa')
 const helmet = require('koa-helmet')
 const kbody = require('koa-body')
 const router = require('./router')
 const scheduler = require('./scheduler')
-const { host, port, appPath } = require('../config')
+
+const { HOST, PORT, APP_PATH } = process.env
 // const prettyjson = require('prettyjson')
 
 process.on('uncaughtException', e => {
@@ -45,7 +47,7 @@ new Koa()
 
   .use(router)
 
-  .listen(port, host, () => {
-    console.log(`server running at ${appPath}`)
+  .listen(PORT, HOST, () => {
+    console.log(`server running at ${APP_PATH}`)
     scheduler.start()
   })
