@@ -5,7 +5,7 @@ const kbody = require('koa-body')
 const router = require('./router')
 const scheduler = require('./scheduler')
 
-const { HOST, PORT, APP_PATH } = process.env
+const { HOST, PORT, APP_PATH, UPLOAD_LIMIT } = process.env
 // const prettyjson = require('prettyjson')
 
 process.on('uncaughtException', e => {
@@ -19,9 +19,9 @@ new Koa()
 
   .use(kbody({
     multipart: true,
-    formLimit: '4mb',
-    textLimit: '4mb',
-    jsonLimit: '4mb',
+    formLimit: UPLOAD_LIMIT,
+    textLimit: UPLOAD_LIMIT,
+    jsonLimit: UPLOAD_LIMIT,
   }))
 
   .use(async function logErrors(ctx, next) {
