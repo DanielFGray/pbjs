@@ -25,20 +25,19 @@ router.get('/:id', async ctx => {
   const { id } = ctx.params
   const res = await app.read({ id })
   if (res.status === 'error') ctx.status = 404
-  ctx.body = res.message
+  ctx.body = res
 })
 
-router.patch('/:id', async ctx => {
-  const { id } = ctx.params
-  const { key, body, title } = ctx.request.body
+router.patch('/:id/:key', async ctx => {
+  const { id, key } = ctx.params
+  const { body, title } = ctx.request.body
   const res = await app.update({ id, key, body, title })
   if (res.status === 'error') ctx.status = 400
   ctx.body = res
 })
 
-router.delete('/:id', async ctx => {
-  const { id } = ctx.params
-  const { key } = ctx.request.body
+router.delete('/:id/:key', async ctx => {
+  const { id, key } = ctx.params
   const res = await app.del({ id, key })
   if (res.status === 'error') ctx.status = 400
   ctx.body = res

@@ -49,7 +49,6 @@ async function read({ id }) {
 }
 
 async function update({ id, key, body, title }) {
-  if (! key) return { status: 'error', message: 'missing key' }
   if (! (body || title)) return { status: 'error', message: 'missing body or title field' }
   const res = await db('pastes')
     .where({ id, key })
@@ -59,7 +58,6 @@ async function update({ id, key, body, title }) {
 }
 
 async function del({ id, key }) {
-  if (! key) return { status: 'error', message: 'missing key' }
   const res = await db('pastes')
     .where({ id, delete: key })
     .delete()
