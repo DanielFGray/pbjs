@@ -45,7 +45,7 @@ async function read({ id }) {
     .where({ id })
     .orWhere({ title: id })
   if (! res) return { status: 'error', message: 'not found' }
-  return { status: 'ok', message: `${res.title ? ` title: ${res.title}\n---\n` : ''}${res.body}` }
+  return `${res.title ? `title: ${res.title}\n---\n` : ''}${res.body}`
 }
 
 async function update({ id, key, body, title }) {
@@ -59,7 +59,7 @@ async function update({ id, key, body, title }) {
 
 async function del({ id, key }) {
   const res = await db('pastes')
-    .where({ id, delete: key })
+    .where({ id, key })
     .delete()
   if (! res) return { status: 'error', message: 'no paste matching id and key' }
   return { status: 'ok', message: 'deleted' }
