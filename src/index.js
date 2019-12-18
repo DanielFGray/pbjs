@@ -36,9 +36,6 @@ new Koa()
 
   .use(async function logger(ctx, next) {
     const start = Date.now()
-    if (Object.keys(ctx.request.body).length) {
-      console.log(ctx.request.body)
-    }
     await next()
     const time = `${Date.now() - start}ms`
     console.log(`${ctx.method} ${ctx.url} ${ctx.status} - ${time}`)
