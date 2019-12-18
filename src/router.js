@@ -21,6 +21,14 @@ router.post('/', async ctx => {
   ctx.body = res
 })
 
+router.get('/:id/:key', async ctx => {
+  // TODO: html form to edit and delete
+  const { id, key } = ctx.params
+  ctx.status = 501
+  ctx.body = `curl -X PATCH -d 'body=your edit here' -d 'title=a new title' ${APP_PATH}/${id}/${key}
+curl -X DELETE ${APP_PATH}/${id}/${key}`
+})
+
 router.get('/:id', async ctx => {
   const { id } = ctx.params
   const res = await app.read({ id })

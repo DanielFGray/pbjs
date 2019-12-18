@@ -2,6 +2,7 @@ require('dotenv/config')
 const Koa = require('koa')
 const helmet = require('koa-helmet')
 const kbody = require('koa-body')
+const prettyjson = require('prettyjson')
 const router = require('./router')
 const scheduler = require('./scheduler')
 
@@ -41,6 +42,12 @@ new Koa()
     console.log(`${ctx.method} ${ctx.url} ${ctx.status} - ${time}`)
   })
 
+  .use(async function intercept(ctx, next) {
+    await next()
+    if(typeof ctx.body !== 'string') {
+      ctx.body = prettyjson.render(ctx.body)
+    }
+  })
 
   .use(router)
 

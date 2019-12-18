@@ -32,8 +32,7 @@ async function create({ body, title, expiration }) {
     key,
   })
   return {
-    status: 'ok',
-    url: `${appPath}/${id}`,
+    url: `${APP_PATH}/${id}`,
     key,
     expires: expires ? moment(expires).format() : undefined,
   }
