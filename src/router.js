@@ -1,45 +1,46 @@
 const Router = require('koa-router')
 const kcompose = require('koa-compose')
-const uuid = require('uuid/v1')
-const db = require('./db')
+const app = require('./app')
+const { appPath } = require('../config')
 
 const router = new Router()
 
-router.get('/', async ctx => {
-  ctx.body = `to upload a new paste:\n  your command | curl -F 'body=<-' ${process.env.APP_PATH}/`
+router.get('/', ctx => {
+  ctx.body = `to upload a new paste:\n\nyour command | curl -F 'body=<-' ${appPath}/\n`
+})
+
+router.post('/', async ctx => {
+  const { body, title, expiration } = ctx.request.body
+  const res = await app.create({
+    body,
+    title,
+    expiration,
+  })
+  if (res.status === 'error') ctx.status = 400
+  ctx.body = res
 })
 
 router.get('/:id', async ctx => {
   const { id } = ctx.params
-  try {
-    const res = await db('pastes').select('body').where({ id })
-    const body = res && res[0] && res[0].body
-    if (body) {
-      ctx.body = body
-    } else {
-      ctx.body = 'Not Found\n'
-      ctx.status = 404
-    }
-  } catch (e) {
-    ctx.body = e.message
-  }
+  const res = await app.read({ id })
+  if (res.status === 'error') ctx.status = 404
+  ctx.body = res.message
 })
 
-router.post('/', async ctx => {
-  const { body } = ctx.request.body
-  if (!body) {
-    ctx.body = 'Missing "body" field'
-    console.log(ctx.request)
-    return
-  }
-  try {
-    const id = uuid()
-    await db('pastes').insert({ body, id })
-    ctx.body = `${process.env.APP_PATH}/${id}\n`
-    console.log(ctx.request)
-  } catch (e) {
-    ctx.body = e.message
-  }
+router.patch('/:id', async ctx => {
+  const { id } = ctx.params
+  const { key, body, title } = ctx.request.body
+  const res = await app.update({ id, key, body, title })
+  if (res.status === 'error') ctx.status = 400
+  ctx.body = res
+})
+
+router.delete('/:id', async ctx => {
+  const { id } = ctx.params
+  const { key } = ctx.request.body
+  const res = await app.del({ id, key })
+  if (res.status === 'error') ctx.status = 400
+  ctx.body = res
 })
 
 module.exports = kcompose([

@@ -2,28 +2,50 @@ const Koa = require('koa')
 const helmet = require('koa-helmet')
 const kbody = require('koa-body')
 const router = require('./router')
-
-const { HOST, PORT } = process.env
+const scheduler = require('./scheduler')
+const { host, port, appPath } = require('../config')
+// const prettyjson = require('prettyjson')
 
 process.on('uncaughtException', e => {
   console.error(e.message)
   process.exit(1)
 })
 
-if (! HOST) throw new Error('must define a HOST env variable')
-if (! PORT) throw new Error('must define a PORT env variable')
+new Koa()
 
-const app = new Koa()
+  .use(helmet())
 
-app.use(helmet())
-app.use(kbody({
-  multipart: true,
-  textLimit: '4mb',
-  jsonLimit: '4mb',
-  formLimit: '4mb',
-}))
-app.use(router)
+  .use(kbody({
+    multipart: true,
+    formLimit: '4mb',
+    textLimit: '4mb',
+    jsonLimit: '4mb',
+  }))
 
-app.listen(PORT, HOST, () => {
-  console.log('server running')
-})
+  .use(async function logErrors(ctx, next) {
+    try {
+      await next()
+    } catch (e) {
+      console.error(e)
+      ctx.status = 500
+      ctx.body = 'Internal Server Error'
+    }
+  })
+
+  .use(async function logger(ctx, next) {
+    const start = Date.now()
+    if (Object.keys(ctx.request.body).length) {
+      console.log(ctx.request.body)
+    }
+    await next()
+    const time = `${Date.now() - start}ms`
+    console.log(`${ctx.method} ${ctx.url} ${ctx.status} - ${time}`)
+  })
+
+
+  .use(router)
+
+  .listen(port, host, () => {
+    console.log(`server running at ${appPath}`)
+    scheduler.start()
+  })
