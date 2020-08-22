@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "knex": "^0.20.1",
-    "koa": "^2.7.0",
+    "koa": "^2.13.0",
     "koa-body": "^4.1.0",
     "koa-compose": "^4.1.0",
     "koa-helmet": "^5.2.0",
